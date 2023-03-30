@@ -10,7 +10,7 @@ package stack
 import "github.com/lyfive/go-struct/list"
 
 type Stack struct {
-	*list.List
+	list *list.List
 }
 
 func New() *Stack {
@@ -18,23 +18,25 @@ func New() *Stack {
 }
 
 func (s *Stack) Push(data any) {
-	s.AddToHead(data)
+	s.list.AddToHead(data)
 }
 
 func (s *Stack) Pop() any {
-	if s.Len() == 0 {
+	if s.list.Len() == 0 {
+		panic("stack is empty!")
 		return nil
 	}
-	return s.RemoveHead()
+	return s.list.RemoveHead()
 }
 
 func (s *Stack) Empty() bool {
-	return s.Len() == 0
+	return s.list.Len() == 0
 }
 
 func (s *Stack) Top() any {
 	if s.Empty() {
+		panic("stack is empty!")
 		return nil
 	}
-	return s.Begin().Data
+	return s.list.Begin().Data
 }

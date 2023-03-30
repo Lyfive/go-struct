@@ -10,31 +10,33 @@ package queue
 import "github.com/lyfive/go-struct/list"
 
 type Queue struct {
-	*list.List
+	list *list.List
 }
 
 func New() *Queue {
-	return &Queue{list.New()}
+	return &Queue{list: list.New()}
 }
 
 func (q *Queue) Push(data any) {
-	q.AddToTail(data)
+	q.list.AddToTail(data)
 }
 
 func (q *Queue) Pop() any {
-	if q.Len() == 0 {
+	if q.list.Len() == 0 {
+		panic("queue is empty!")
 		return nil
 	}
-	return q.RemoveHead()
+	return q.list.RemoveHead()
 }
 
 func (q *Queue) Empty() bool {
-	return q.Len() == 0
+	return q.list.Len() == 0
 }
 
 func (q *Queue) Front() any {
 	if q.Empty() {
+		panic("queue is empty!")
 		return nil
 	}
-	return q.Begin().Data
+	return q.list.Begin().Data
 }

@@ -15,7 +15,6 @@ type Node struct {
 	Data any
 	next *Node
 	pre  *Node
-
 	list *List
 }
 
@@ -149,7 +148,7 @@ func (list *List) RemoveNode(node *Node) error {
 func (list *List) RemoveData(data any) {
 	for node := list.head.next; node != list.tail; node = node.next {
 		if node.Data == data {
-			list.RemoveNode(node)
+			_ = list.RemoveNode(node)
 			return
 		}
 	}
