@@ -7,12 +7,19 @@
 */
 package list
 
-import "testing"
+import (
+	"fmt"
+	"reflect"
+	"testing"
+)
 
 func TestList(t *testing.T) {
-	ls := New()
+	ls := New[int]()
+	fmt.Printf("%T", ls)
+	ls.Push(1)
+	//ls.Push("abc") error
 	for i := ls.Begin(); i != ls.End(); i = i.Next() {
-		t.Log(i.Data)
+		t.Log(reflect.TypeOf(i.Data))
 	}
 	ls.Push(1)
 	ls.Push(2)
@@ -43,7 +50,7 @@ func TestList(t *testing.T) {
 	ls.Push(2)
 	for i := ls.Begin(); i != ls.End(); i = i.Next() {
 		if i.Data == 1 {
-			ls.RemoveNode(i)
+			_ = ls.RemoveNode(i)
 		}
 	}
 	for i := ls.Begin(); i != ls.End(); i = i.Next() {

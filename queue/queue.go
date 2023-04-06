@@ -2,26 +2,26 @@
 	@author: lyfive
 	@since: 2023/1/17-17:26
 	@desc: //TODO
-
 *
 */
+
 package queue
 
 import "github.com/lyfive/go-struct/list"
 
-type Queue struct {
-	list *list.List
+type Queue[T any] struct {
+	list *list.List[T]
 }
 
-func New() *Queue {
-	return &Queue{list: list.New()}
+func New[T any]() *Queue[T] {
+	return &Queue[T]{list: list.New[T]()}
 }
 
-func (q *Queue) Push(data any) {
+func (q *Queue[T]) Push(data T) {
 	q.list.AddToTail(data)
 }
 
-func (q *Queue) Pop() any {
+func (q *Queue[T]) Pop() any {
 	if q.list.Len() == 0 {
 		panic("queue is empty!")
 		return nil
@@ -29,11 +29,11 @@ func (q *Queue) Pop() any {
 	return q.list.RemoveHead()
 }
 
-func (q *Queue) Empty() bool {
+func (q *Queue[T]) Empty() bool {
 	return q.list.Len() == 0
 }
 
-func (q *Queue) Front() any {
+func (q *Queue[T]) Front() any {
 	if q.Empty() {
 		panic("queue is empty!")
 		return nil

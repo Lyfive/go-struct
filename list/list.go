@@ -2,42 +2,42 @@
 	@author: lyfive
 	@since: 2023/1/17-16:11
 	@desc: //TODO
-
 *
 */
+
 package list
 
 import (
 	"errors"
 )
 
-type Node struct {
-	Data any
-	next *Node
-	pre  *Node
-	list *List
+type Node[T any] struct {
+	Data T
+	next *Node[T]
+	pre  *Node[T]
+	list *List[T]
 }
 
-func (node *Node) Next() *Node {
+func (node *Node[T]) Next() *Node[T] {
 	return node.next
 }
 
-func (node *Node) Pre() *Node {
+func (node *Node[T]) Pre() *Node[T] {
 	return node.pre
 }
 
 // List is a bidirectional list, head and tail just for convenience
-type List struct {
-	head *Node
-	tail *Node
+type List[T any] struct {
+	head *Node[T]
+	tail *Node[T]
 	cnt  int
 }
 
 // New return a new list
-func New() *List {
-	newList := &List{
-		head: &Node{},
-		tail: &Node{},
+func New[T any]() *List[T] {
+	newList := &List[T]{
+		head: &Node[T]{},
+		tail: &Node[T]{},
 		cnt:  0,
 	}
 	newList.head.next = newList.tail
@@ -48,8 +48,8 @@ func New() *List {
 }
 
 // AddToHead add a node to head
-func (list *List) AddToHead(data any) {
-	newNode := &Node{
+func (list *List[T]) AddToHead(data T) {
+	newNode := &Node[T]{
 		Data: data,
 		list: list,
 	}
@@ -63,8 +63,8 @@ func (list *List) AddToHead(data any) {
 }
 
 // AddToTail add a node to tail
-func (list *List) AddToTail(data any) {
-	newNode := &Node{
+func (list *List[T]) AddToTail(data T) {
+	newNode := &Node[T]{
 		Data: data,
 		list: list,
 	}
@@ -78,16 +78,16 @@ func (list *List) AddToTail(data any) {
 }
 
 // Push a node to list
-func (list *List) Push(data any) {
+func (list *List[T]) Push(data T) {
 	list.AddToTail(data)
 }
 
 // AddNode add a node after a node
-func (list *List) AddNode(node *Node, data any) error {
+func (list *List[T]) AddNode(node *Node[T], data T) error {
 	if node == nil {
 		return errors.New("node is nil")
 	}
-	newNode := &Node{
+	newNode := &Node[T]{
 		Data: data,
 		list: list,
 	}
@@ -100,9 +100,10 @@ func (list *List) AddNode(node *Node, data any) error {
 }
 
 // RemoveHead remove head node
-func (list *List) RemoveHead() any {
+func (list *List[T]) RemoveHead() T {
 	if list.head.next == list.tail {
-		return nil
+		panic("List is empty!")
+		//return nil
 	}
 	data := list.head.next.Data
 	list.head.list = nil
@@ -113,9 +114,10 @@ func (list *List) RemoveHead() any {
 }
 
 // RemoveTail remove tail node
-func (list *List) RemoveTail() any {
+func (list *List[T]) RemoveTail() T {
 	if list.tail.pre == list.head {
-		return nil
+		panic("List is empty!")
+		//return nil
 	}
 	data := list.tail.pre.Data
 	list.tail.pre.list = nil
@@ -126,12 +128,13 @@ func (list *List) RemoveTail() any {
 }
 
 // Pop tail node
-func (list *List) Pop() any {
+func (list *List[T]) Pop() any {
 	return list.RemoveTail()
 }
 
 // RemoveNode remove a node
-func (list *List) RemoveNode(node *Node) error {
+// Remove but next and pre can be used
+func (list *List[T]) RemoveNode(node *Node[T]) error {
 	if node == nil {
 		return errors.New("node is nil")
 	} else if node.list != list {
@@ -145,32 +148,32 @@ func (list *List) RemoveNode(node *Node) error {
 }
 
 // RemoveData remove a node by data
-func (list *List) RemoveData(data any) {
-	for node := list.head.next; node != list.tail; node = node.next {
-		if node.Data == data {
-			_ = list.RemoveNode(node)
-			return
-		}
-	}
-}
+//func (list *List[T]) RemoveData(data T) {
+//    for node := list.head.next; node != list.tail; node = node.next {
+//        if node.Data == data {
+//            _ = list.RemoveNode(node)
+//            return
+//        }
+//    }
+//}
 
 // FindNode find a node is in the list
-func (list *List) FindNode(node *Node) bool {
+func (list *List[T]) FindNode(node *Node[T]) bool {
 	return node.list == list
 }
 
 // FindData find a node by data
-func (list *List) FindData(data any) *Node {
-	for node := list.head.next; node != list.tail; node = node.next {
-		if node.Data == data {
-			return node
-		}
-	}
-	return nil
-}
+//func (list *List) FindData(data T) *Node {
+//    for node := list.head.next; node != list.tail; node = node.next {
+//        if node.Data == data {
+//            return node
+//        }
+//    }
+//    return nil
+//}
 
 // Reverse the list
-func (list *List) Reverse() {
+func (list *List[T]) Reverse() {
 	for node := list.head; node != nil; node = node.pre {
 		node.next, node.pre = node.pre, node.next
 	}
@@ -178,16 +181,16 @@ func (list *List) Reverse() {
 }
 
 // Begin return the list begin pointer
-func (list *List) Begin() *Node {
+func (list *List[T]) Begin() *Node[T] {
 	return list.head.next
 }
 
 // End return the list end pointer
-func (list *List) End() *Node {
+func (list *List[T]) End() *Node[T] {
 	return list.tail
 }
 
 // Len return this list length
-func (list *List) Len() int {
+func (list *List[T]) Len() int {
 	return list.cnt
 }
